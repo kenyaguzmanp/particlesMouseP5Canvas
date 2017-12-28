@@ -16,15 +16,17 @@ var Mover =  function(x, y, name, size, context){
     this.isHovering= false;
     this.angleMov=0;
     this.isToMouse = false;
+    this.mousex = 0;
+    this.mousey = 0;
 
     
     this.display = function(){
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
-        this.theta +=0.1;
+        //this.theta +=0.1;
 
         //this.rotateOwn();
         //this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, true);
-        this.movementParticle(1, 1, 2, this.isToMouse, this.theta);
+        this.movementParticle(1, 1, 2, this.isToMouse, this.theta, this.mousex, this.mousey);
     };
 
     this.drawSimpleParticle = function(posx, posy, ishover, color){
@@ -56,54 +58,56 @@ var Mover =  function(x, y, name, size, context){
         this.position[1] = py;
     };
 
-    this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle){
-        //var angle2 = Math.atan2(mouseY - canvas.height / 2, mouseX - canvas.width / 2);
+    this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my){
         //var angle = isToMouse ? angle2 : this.angle;
+        this.theta +=0.1;
         var angleAux =  this.theta;
         if(isToMouse){
-            //this.angleMov += 0.5;
-            angleAux *= 2;
+           // angleAux *= 2;
+           // var angle2 = Math.atan2(mouseY - canvas.height / 2, mouseX - canvas.width / 2);
+           var angle2 = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
+           angleAux = angle2;
+           var px = this.radiusParticle * Math.cos(angleAux) + this.centerParticle[0];
+           var py = this.radiusParticle * Math.sin(angleAux) + this.centerParticle[1];
+    
         }else{
             //this.angleMov = angle;
             angleAux = angle;
+            var px = orbit*(this.radiusParticle/2) * Math.cos(angleAux*amplitude) + this.centerParticle[0];
+            var py = orbit*(this.radiusParticle/2) * Math.sin(angleAux*amplitude) + this.centerParticle[1];
         }
 
-        var px = orbit*(this.radiusParticle/2) * Math.cos(angleAux*amplitude) + this.centerParticle[0];
-        var py = orbit*(this.radiusParticle/2) * Math.sin(angleAux*amplitude) + this.centerParticle[1];
+        //var px = orbit*(this.radiusParticle/2) * Math.cos(angleAux*amplitude) + this.centerParticle[0];
+        //var py = orbit*(this.radiusParticle/2) * Math.sin(angleAux*amplitude) + this.centerParticle[1];
         this.position[0] = px;
         this.position[1] = py;
+        //console.log("mousex: " + mx + "mousey: " + my);
+       // console.log("px " + px + "py " + py);
     }
 
-    this.handleHover =  function (event) {
-        var x = event.clientX;
-        var y = event.clientY;
+    this.handleHover =  function (event,x, y) {
+       // var x = event.clientX;
+       // var y = event.clientY;
+      // this.mousex = x;
+      // this.mousey = y;
         var distMousePart = distance(x, y, this.position[0], this.position[1]);
 
-        this.insideParticle(x,y, distMousePart);
-
-        if(distMousePart<300 && distMousePart>10){
-            console.log("dentro de radio de accion iman");
+        console.log("x: " + x + " y: " + y);
+        console.log("posx: " + this.position[0] + " posy: " + this.position[1]);
+       // this.insideParticle(x,y, distMousePart);
+       console.log("dist: " + distMousePart);
+        if(distMousePart<100 && distMousePart>=3){
+            //console.log("dentro de radio de accion iman");
             this.color = "green";
             this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
             this.isToMouse = true;
-            this.movementParticle(1, 1, 2, this.isToMouse, this.theta);
-        }else if(distMousePart<10){
-            this.insideParticle(x,y, distMousePart);
-        }
-    }
+            this.movementParticle(1, 1, 2, this.isToMouse, this.theta, x, y);
 
-    this.insideParticle = function (x, y, dist){
-        if(dist< this.sizeParticle){
-            console.log("dentro de particula");
-            this.isHovering =  true;
-            this.color= "red";
-            this.drawSimpleParticle(200, 500, this.isHovering);
-        }else{
-            this.isHovering = false;
-            this.color= "blue";
-            this.drawSimpleParticle(200, 500, this.isHovering);
-            this.isToMouse = false;
-            this.movementParticle(1, 1, 2, this.isToMouse, this.theta);
+        }else if(distMousePart<3){
+           this.isHovering =  true;
+           this.color= "red";
+           this.drawSimpleParticle(200, 500, this.isHovering);
+
         }
     }
 

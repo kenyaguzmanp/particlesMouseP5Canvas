@@ -3,6 +3,10 @@ var ctx;
 var reqanimationreference;
 var x=75;
 var mover;
+var mover2;
+
+var mousex=0;
+var mousey=0;
 
 function init(){
     createCanvas();
@@ -13,6 +17,7 @@ function createCanvas() {
     console.log("in create canvas");
     cnvContainerDiv = document.getElementById('canvasContainer');
     canvas = document.createElement('canvas');
+    console.log("canvas ", canvas)
     canvas.id = "particles";
     canvas.width = cnvContainerDiv.offsetWidth;
     canvas.height = 600;
@@ -42,7 +47,9 @@ canvas.addEventListener("mousemove", function(event) {
 });
 
 function mouseMove(event){
-    mover.handleHover(event);
+    mousex = event.clientX;
+    mousey = event.clientY;
+    mover.handleHover(mousex, mousey);
 }
 
 function distance(x1, y1, x2, y2){

@@ -9,30 +9,36 @@ var Mover =  function(x, y, name, size, context){
     this.name = name;
     this.color = [127, 127, 127];
     this.sizeParticle = size;
-    this.orbit = 0.01; 
-    this.amplitude = 1.5; 
+    this.orbit = 0.7; 
+    this.amplitude = 0.5; 
     this.showBar = false;
     this.ctx = context;
 
     
     this.display = function(){
-        console.log(this.ctx);
+        this.drawSimpleParticle(this.position[0], this.position[1]);
+        this.theta +=0.1;
+        this.rotateOwn();
+    };
+
+    this.drawSimpleParticle = function(posx, posy){
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'white';
         ctx.beginPath();
-        ctx.arc(x,x, 50, 0, 2 * Math.PI);
+        ctx.arc(posx, posy, 50, 0, 2 * Math.PI);
         ctx.fillStyle = "blue";
         ctx.fill();
         ctx.stroke();
-        x+=0.5;
-    }
+    };
 
+    this.rotateOwn = function (){
+        var orbit=this.orbit;
+        var amplitude = this.amplitude;
+        var px = orbit*(this.radiusParticle/2) * Math.cos(this.theta*amplitude) + this.centerParticle[0];
+        var py = orbit*(this.radiusParticle/2) * Math.sin(this.theta*amplitude) + this.centerParticle[1];
+        this.position[0] = px;
+        this.position[1] = py;
+    };
 
-
-
-    this.getRandom = function(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-}
+};
 

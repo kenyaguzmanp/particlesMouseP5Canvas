@@ -13,21 +13,31 @@ var Mover =  function(x, y, name, size, context){
     this.amplitude = 0.5; 
     this.showBar = false;
     this.ctx = context;
+    this.isHovering= false;
 
     
     this.display = function(){
-        this.drawSimpleParticle(this.position[0], this.position[1]);
+        this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering);
         this.theta +=0.1;
         this.rotateOwn();
     };
 
-    this.drawSimpleParticle = function(posx, posy){
+    this.drawSimpleParticle = function(posx, posy, ishover){
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'white';
         ctx.beginPath();
         ctx.arc(posx, posy, 50, 0, 2 * Math.PI);
-        ctx.fillStyle = "blue";
+        ctx.fillStyle = ishover ? "red" : "blue";
         ctx.fill();
+        /*
+        if(ishover){
+            ctx.fillStyle = "red";
+            ctx.fill();
+        }else{
+            ctx.fillStyle = "blue";
+            ctx.fill();
+        }
+        */
         ctx.stroke();
     };
 
@@ -39,6 +49,19 @@ var Mover =  function(x, y, name, size, context){
         this.position[0] = px;
         this.position[1] = py;
     };
+
+    this.handleHover =  function (event) {
+        var x = event.clientX;
+        var y = event.clientY;
+        var distMousePart = distance(x, y, this.position[0], this.position[1]);
+        if(distMousePart< this.sizeParticle){
+            this.isHovering =  true;
+            this.drawSimpleParticle(200, 500, this.isHovering);
+        }else{
+            this.isHovering = false;
+            this.drawSimpleParticle(200, 500, this.isHovering);
+        }
+    }
 
 };
 

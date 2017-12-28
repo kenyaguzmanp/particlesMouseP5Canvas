@@ -32,20 +32,23 @@ function draw() {
     //Draw black background
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    /*
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(x,x, 50, 0, 2 * Math.PI);
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.stroke();
-    x+=0.5;*/
     mover.display();
-    //set initial values
-    //setWaveValues();
-
 }
 
 init();
+
+canvas.addEventListener("mousemove", function(event) {
+    mouseMove(event)
+});
+
+function mouseMove(event){
+    mover.handleHover(event);
+}
+
+function distance(x1, y1, x2, y2){
+    var a = x1 - x2
+    var b = y1 - y2
+    
+    var c = Math.sqrt( a*a + b*b );
+    return c;
+}

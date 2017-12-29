@@ -30,7 +30,7 @@ var Mover = function (x, y, name, size, context) {
 
     this.display = function () {
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
-        console.log(this.isMouseInside);
+        //console.log(this.isMouseInside);
         this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
     };
 
@@ -57,8 +57,7 @@ var Mover = function (x, y, name, size, context) {
         var dist = this.distance(mx, my, this.position[0], this.position[1]);
         var dist2 =dist - this.sizeParticle;
         //console.log("dist " + dist2);
-
-        console.log(this.isMouseInside);
+        //console.log(this.isMouseInside);
         
             if (isToMouse && !isMouseInside) {
                 this.toMouse(mx, my);

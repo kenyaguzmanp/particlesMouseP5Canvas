@@ -21,6 +21,10 @@ var Mover = function (x, y, name, size, context) {
     this.isToMouse = false;
     this.mousex = 0;
     this.mousey = 0;
+    this.shiftCx = 0;
+    this.shiftCy = 0;
+    this.centerAux = [x,y];
+    
 
 
     this.display = function () {
@@ -55,30 +59,41 @@ var Mover = function (x, y, name, size, context) {
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my) {
         if (isToMouse) {
             this.shiftAng = 0.1;
-            var angle2 = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
+            this.shiftCx = 1;
+            this.shiftCy = 1;
+            //this.orbit = 5;
+          //  radius = this.radiusParticle;
+           // this.amplitude = 1;
+            //var angle2 = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
+            //this.shiftAng = angle2;
 
-           // var px = orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * amplitude) + this.centerParticle[0];
-            //var py = orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * amplitude) + this.centerParticle[1];
-            
-           //console.log("theta: angulo donde quedo antes de cambair " + this.theta);
+           console.log("mx: " + mx + " my: " + my);
            //console.log("angleAux: angulo que cambia la rapidez" + this.angleAux);           
 
         } else {
             //only change theta angle when is the movement related to that angle
             this.shiftAng = 0.05;
-
+            this.shiftCx = 0;
+            this.shiftCy = 0;
+            //this.orbit = 0.7;
+            //this.amplitude = 0.5;
+          //  radius = this.radiusParticle/2;
             //console.log("theta: angulo donde quedo antes de cambair " + this.theta);
             //console.log("angleAux2: angulo que cambia la rapidez" + this.angleAux2);
-            
-            //var px = orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux2 * amplitude) + this.centerParticle[0];
-            //var py = orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux2 * amplitude) + this.centerParticle[1];
             
         }
         this.angleAux += this.shiftAng;
         this.theta = this.angleAux;
 
-        var px = orbit*(this.radiusParticle/2) * Math.cos(this.angleAux*amplitude) + this.centerParticle[0];
-        var py = orbit*(this.radiusParticle/2) * Math.sin(this.angleAux*amplitude) + this.centerParticle[1];
+        this.centerAux[0] += this.shiftCx;
+        this.centerAux[1] += this.shiftCy;
+        this.centerParticle = this.centerAux;
+        
+        var px = orbit*(this.radiusParticle/2) * Math.cos(this.angleAux*amplitude) + this.centerAux[0];
+        var py = orbit*(this.radiusParticle/2) * Math.sin(this.angleAux*amplitude) + this.centerAux[1];
+
+       // var px = orbit*(this.radiusParticle/2) * Math.cos(this.angleAux*amplitude) + this.centerParticle[0];
+       // var py = orbit*(this.radiusParticle/2) * Math.sin(this.angleAux*amplitude) + this.centerParticle[1];
         this.position[0] = px;
         this.position[1] = py;
     }

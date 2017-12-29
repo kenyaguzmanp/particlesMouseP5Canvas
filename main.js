@@ -54,6 +54,8 @@ function mouseMove(event){
     var cx = mover.centerParticle[0];
     var cy = mover.centerParticle[1];
     var distMousePart = this.distance(mousex, mousey, cx, cy);
+    mover.mousex = mousex;
+    mover.mousey = mousey;
     //console.log("cx: " + cx + " cy: " + cy);
     //console.log("px: " + mover.position[0] + " py: " + mover.position[1]);
     //console.log("distancia: " + distMousePart);

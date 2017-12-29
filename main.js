@@ -8,7 +8,6 @@ var mover2;
 var mousex=0;
 var mousey=0;
 
-var test = "se ve";
 
 function init(){
     createCanvas();
@@ -56,21 +55,18 @@ function mouseMove(event){
     var distMousePart = this.distance(mousex, mousey, cx, cy);
     mover.mousex = mousex;
     mover.mousey = mousey;
-    //console.log("cx: " + cx + " cy: " + cy);
-    //console.log("px: " + mover.position[0] + " py: " + mover.position[1]);
-    //console.log("distancia: " + distMousePart);
+
     if (distMousePart <= mover.sizeParticle) {
         //inside particle
-        //console.log("dentro de la particula");
         mover.color = "red";
         mover.isToMouse = false;
 
     } else if (distMousePart > mover.sizeParticle && distMousePart > 300) {
-        //In the action radius
+        //out of the action radius
         mover.color = "blue";
         mover.isToMouse = false;
     } else {
-        //out of the action radius
+        //in the action radius
         mover.color = "green";
         mover.isToMouse = true;
     }

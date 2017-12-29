@@ -23,18 +23,14 @@ var Mover = function (x, y, name, size, context) {
     this.mousey = 0;
     this.shiftCx = 0;
     this.shiftCy = 0;
-    this.centerAux = [x,y];
-    
+    this.centerAux = [x, y];
+
 
 
     this.display = function () {
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
-        //this.theta +=0.1;
 
-        //this.rotateOwn();
-        //this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, true);
         this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey);
-        //this.movementParticle(1, 1, 2, this.isToMouse, this.theta, this.mousex, this.mousey);
     };
 
     this.drawSimpleParticle = function (posx, posy, ishover, color) {
@@ -58,42 +54,23 @@ var Mover = function (x, y, name, size, context) {
 
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my) {
         if (isToMouse) {
-            var magMouse =  this.magnitude(mx, my)
-            var normMx = mx/magMouse;
-            var normMy = my/magMouse;
-            var dirX = this.addDirection(mx,this.position[0]);
-            var dirY = this.addDirection(my,this.position[1]);
+            var magMouse = this.magnitude(mx, my)
+            var normMx = mx / magMouse;
+            var normMy = my / magMouse;
+            var dirX = this.addDirection(mx, this.position[0]);
+            var dirY = this.addDirection(my, this.position[1]);
+            var dist = this.distance(mx, my, this.position[0], this.position[1]);
 
             this.shiftAng = 0.1;
-            this.shiftCx = normMx*dirX;
-            this.shiftCy = normMy*dirY;
+            this.shiftCx = normMx * dirX;
+            this.shiftCy = normMy * dirY;
 
-            
-            //this.orbit = 1;
-            //radius = this.radiusParticle;
-            //this.amplitude = 1;
-           //var angle2 = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
-           
-           //this.shiftAng = angle2;
-
-          //console.log("angle2: " + angle2);
-         //console.log("dirx: " + dirX + " dirY: " + dirY);       
-         // console.log("magnitud dle mouse: " + magMouse);
-         // console.log("normMx: " + normMx + " normMy: " + normMy); 
-              
 
         } else {
             //only change theta angle when is the movement related to that angle
             this.shiftAng = 0.05;
             this.shiftCx = 0;
             this.shiftCy = 0;
-
-           // this.orbit = 0.7;
-           // this.amplitude = 0.5;
-          //radius = this.radiusParticle/2;
-            //console.log("theta: angulo donde quedo antes de cambair " + this.theta);
-            //console.log("angleAux2: angulo que cambia la rapidez" + this.angleAux2);
-            
         }
         this.angleAux += this.shiftAng;
         this.theta = this.angleAux;
@@ -101,12 +78,9 @@ var Mover = function (x, y, name, size, context) {
         this.centerAux[0] += this.shiftCx;
         this.centerAux[1] += this.shiftCy;
         this.centerParticle = this.centerAux;
-        
-        var px = orbit*(this.radiusParticle/2) * Math.cos(this.angleAux*amplitude) + this.centerAux[0];
-        var py = orbit*(this.radiusParticle/2) * Math.sin(this.angleAux*amplitude) + this.centerAux[1];
 
-       // var px = orbit*(this.radiusParticle/2) * Math.cos(this.angleAux*amplitude) + this.centerParticle[0];
-       // var py = orbit*(this.radiusParticle/2) * Math.sin(this.angleAux*amplitude) + this.centerParticle[1];
+        var px = orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * amplitude) + this.centerAux[0];
+        var py = orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * amplitude) + this.centerAux[1];
         this.position[0] = px;
         this.position[1] = py;
     }
@@ -120,15 +94,13 @@ var Mover = function (x, y, name, size, context) {
     }
 
     this.magnitude = function (x, y) {
-        return Math.sqrt(x*x + y*y);
+        return Math.sqrt(x * x + y * y);
     }
 
-    this.addDirection = function (mx, x){
-        if(mx - x > 0){
-            console.log("sentido al puntero");
+    this.addDirection = function (mx, x) {
+        if (mx - x > 0) {
             return 1;
-        }else{
-            console.log("sentido contrario al puntero");
+        } else {
             return -1;
         }
     }

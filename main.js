@@ -1,7 +1,7 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticles = 5;
+var numberParticles = 1;
 var particles = [];
 
 var mousex=0;
@@ -72,15 +72,19 @@ function mouseMove(event){
             //inside particle
             mover.color = "red";
             mover.isToMouse = false;
+           // mover.isMouseInside = true;
+            //console.log("is inside when move mouse");
     
         } else if (distMousePart > mover.sizeParticle && distMousePart > 300) {
             //out of the action radius
             mover.color = "blue";
             mover.isToMouse = false;
+          //  mover.isMouseInside = false;
         } else {
             //in the action radius
             mover.color = "green";
             mover.isToMouse = true;
+          //  mover.isMouseInside = false;
         }
         
     }

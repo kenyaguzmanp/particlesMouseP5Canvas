@@ -19,6 +19,7 @@ var Mover = function (x, y, name, size, context) {
     this.isHovering = false;
     this.angleMov = 0;
     this.isToMouse = false;
+    this.isMouseInside = false;
     this.mousex = 0;
     this.mousey = 0;
     this.shiftCx = 0;
@@ -29,8 +30,8 @@ var Mover = function (x, y, name, size, context) {
 
     this.display = function () {
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
-
-        this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey);
+        console.log(this.isMouseInside);
+        this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
     };
 
     this.drawSimpleParticle = function (posx, posy, ishover, color) {
@@ -52,37 +53,52 @@ var Mover = function (x, y, name, size, context) {
         this.position[1] = py;
     };
 
-    this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my) {
-        if (isToMouse) {
-            var magMouse = this.magnitude(mx, my)
-            var normMx = mx / magMouse;
-            var normMy = my / magMouse;
-            var dirX = this.addDirection(mx, this.position[0]);
-            var dirY = this.addDirection(my, this.position[1]);
-            var dist = this.distance(mx, my, this.position[0], this.position[1]);
+    this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my, isMouseInside) {
+        var dist = this.distance(mx, my, this.position[0], this.position[1]);
+        var dist2 =dist - this.sizeParticle;
+        //console.log("dist " + dist2);
 
-            this.shiftAng = 0.1;
-            this.shiftCx = normMx * dirX;
-            this.shiftCy = normMy * dirY;
+        console.log(this.isMouseInside);
+        
+            if (isToMouse && !isMouseInside) {
+                this.toMouse(mx, my);
+    
+            } else {
+                this.localMovement();
+            }
 
+            
+            this.angleAux += this.shiftAng;
+            this.theta = this.angleAux;
+    
+            this.centerAux[0] += this.shiftCx;
+            this.centerAux[1] += this.shiftCy;
+            this.centerParticle = this.centerAux;
+    
+            var px = orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * amplitude) + this.centerAux[0];
+            var py = orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * amplitude) + this.centerAux[1];
 
-        } else {
-            //only change theta angle when is the movement related to that angle
-            this.shiftAng = 0.05;
-            this.shiftCx = 0;
-            this.shiftCy = 0;
-        }
-        this.angleAux += this.shiftAng;
-        this.theta = this.angleAux;
+            this.position[0] = px;
+            this.position[1] = py;     
+        
+    }
 
-        this.centerAux[0] += this.shiftCx;
-        this.centerAux[1] += this.shiftCy;
-        this.centerParticle = this.centerAux;
+    this.toMouse = function(mx, my){
+        var magMouse = this.magnitude(mx, my)
+        var normMx = mx / magMouse;
+        var normMy = my / magMouse;
+        var dirX = this.addDirection(mx, this.position[0]);
+        var dirY = this.addDirection(my, this.position[1]);            
 
-        var px = orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * amplitude) + this.centerAux[0];
-        var py = orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * amplitude) + this.centerAux[1];
-        this.position[0] = px;
-        this.position[1] = py;
+        this.shiftAng = 0.1;
+        this.shiftCx = normMx * dirX;
+        this.shiftCy = normMy * dirY;
+    }
+
+    this.localMovement = function(){
+        this.shiftAng = 0.05;
+        this.shiftCx = 0;
+        this.shiftCy = 0;
     }
 
     this.distance = function (x1, y1, x2, y2) {

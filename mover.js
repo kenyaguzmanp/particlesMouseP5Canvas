@@ -25,13 +25,22 @@ var Mover = function (x, y, name, size, context) {
     this.shiftCx = 0;
     this.shiftCy = 0;
     this.centerAux = [x, y];
+    this.distanceMouse =0;
 
 
 
     this.display = function () {
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
-        //console.log(this.isMouseInside);
-        this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
+        
+        //this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
+        var dist = this.distance(this.mousex, this.mousey, this.position[0], this.position[1]) - this.sizeParticle/2;
+        console.log("dist2: " + dist);
+        if(dist<50){
+            console.log("insideeee");
+        }else{
+            this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
+        }
+
     };
 
     this.drawSimpleParticle = function (posx, posy, ishover, color) {
@@ -54,11 +63,9 @@ var Mover = function (x, y, name, size, context) {
     };
 
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my, isMouseInside) {
-        var dist = this.distance(mx, my, this.position[0], this.position[1]);
-        var dist2 =dist - this.sizeParticle;
-        //console.log("dist " + dist2);
+        //console.log("this.distanceMouse " + this.distanceMouse);
         //console.log(this.isMouseInside);
-        
+
             if (isToMouse && !isMouseInside) {
                 this.toMouse(mx, my);
     
@@ -78,8 +85,8 @@ var Mover = function (x, y, name, size, context) {
             var py = orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * amplitude) + this.centerAux[1];
 
             this.position[0] = px;
-            this.position[1] = py;     
-        
+            this.position[1] = py; 
+       
     }
 
     this.toMouse = function(mx, my){

@@ -34,18 +34,8 @@ var Mover = function (x, y, name, size, context) {
         ctx.strokeStyle = 'white';
         ctx.beginPath();
         ctx.arc(posx, posy, 50, 0, 2 * Math.PI);
-        //ctx.fillStyle = ishover ? "red" : "blue";
-        //ctx.fill();
-
-        if (ishover) {
-            ctx.fillStyle = "red";
-            ctx.fill();
-
-        } else {
-            ctx.fillStyle = color;
-            ctx.fill();
-        }
-
+        ctx.fillStyle = this.color;
+        ctx.fill();
         ctx.stroke();
     };
 
@@ -59,52 +49,35 @@ var Mover = function (x, y, name, size, context) {
     };
 
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my) {
-        this.theta += 0.1;
+        //this.theta += 0.1;
         var angleAux = this.theta;
         if (isToMouse) {
             // angleAux *= 2;
             // var angle2 = Math.atan2(mouseY - canvas.height / 2, mouseX - canvas.width / 2);
             var angle2 = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
             angleAux = angle2;
+            /*
             var px = this.radiusParticle * Math.cos(angleAux) + this.centerParticle[0];
             var py = this.radiusParticle * Math.sin(angleAux) + this.centerParticle[1];
+            */
+            px = mover.position[0];
+            py= mover.position[1];
 
         } else {
+            //only change theta angle when is the movement related to that angle
+            this.theta += 0.1;
             //this.angleMov = angle;
             angleAux = angle;
+            
             var px = orbit * (this.radiusParticle / 2) * Math.cos(angleAux * amplitude) + this.centerParticle[0];
             var py = orbit * (this.radiusParticle / 2) * Math.sin(angleAux * amplitude) + this.centerParticle[1];
+            
         }
 
         //var px = orbit*(this.radiusParticle/2) * Math.cos(angleAux*amplitude) + this.centerParticle[0];
         //var py = orbit*(this.radiusParticle/2) * Math.sin(angleAux*amplitude) + this.centerParticle[1];
         this.position[0] = px;
         this.position[1] = py;
-    }
-
-    this.handleHover = function (event, x, y) {
-        this.mousex = x;
-        this.mousey = y;
-        var distMousePart = this.distance(x, y, this.position[0], this.position[1]);
-
-        if (distMousePart <= this.sizeParticle) {
-            //inside particle
-            console.log("dentro de la particula");
-            this.isHovering = true;
-            this.isToMouse = false;
-            this.color = "red";
-
-        } else if (distMousePart > this.sizeParticle && distMousePart > 300) {
-            //In the action radius
-            this.isHovering = false;
-            this.isToMouse = false;
-            this.color = "blue";
-        } else {
-            //out of the action radius
-            this.isHovering = false;
-            this.isToMouse = false;
-            this.color = "green";
-        }
     }
 
     this.distance = function (x1, y1, x2, y2) {

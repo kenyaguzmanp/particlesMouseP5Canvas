@@ -54,12 +54,12 @@ function mouseMove(event){
     var cx = mover.centerParticle[0];
     var cy = mover.centerParticle[1];
     var distMousePart = this.distance(mousex, mousey, cx, cy);
-    console.log("cx: " + cx + " cy: " + cy);
-    console.log("px: " + mover.position[0] + " py: " + mover.position[1]);
-    console.log("distancia: " + distMousePart);
+    //console.log("cx: " + cx + " cy: " + cy);
+    //console.log("px: " + mover.position[0] + " py: " + mover.position[1]);
+    //console.log("distancia: " + distMousePart);
     if (distMousePart <= mover.sizeParticle) {
         //inside particle
-        console.log("dentro de la particula");
+        //console.log("dentro de la particula");
         mover.color = "red";
         mover.isToMouse = false;
 

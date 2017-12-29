@@ -27,7 +27,7 @@ function createCanvas() {
     cnvContainerDiv.appendChild(canvas);
     ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    mover =  new Mover(100, 100, "mover1", 100, ctx);
+    mover =  new Mover(canvas.width/2, canvas.height/2, "mover1", 100, ctx);
     //draw the canvas
     draw();
 }

@@ -58,26 +58,39 @@ var Mover = function (x, y, name, size, context) {
 
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my) {
         if (isToMouse) {
-            this.shiftAng = 0.1;
-            this.shiftCx = 1;
-            this.shiftCy = 1;
-            //this.orbit = 5;
-          //  radius = this.radiusParticle;
-           // this.amplitude = 1;
-            //var angle2 = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
-            //this.shiftAng = angle2;
+            var magMouse =  this.magnitude(mx, my)
+            var normMx = mx/magMouse;
+            var normMy = my/magMouse;
+            var dirX = this.addDirection(mx,this.position[0]);
+            var dirY = this.addDirection(my,this.position[1]);
 
-           console.log("mx: " + mx + " my: " + my);
-           //console.log("angleAux: angulo que cambia la rapidez" + this.angleAux);           
+            this.shiftAng = 0.1;
+            this.shiftCx = normMx*dirX;
+            this.shiftCy = normMy*dirY;
+
+            
+            //this.orbit = 1;
+            //radius = this.radiusParticle;
+            //this.amplitude = 1;
+           //var angle2 = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
+           
+           //this.shiftAng = angle2;
+
+          //console.log("angle2: " + angle2);
+         //console.log("dirx: " + dirX + " dirY: " + dirY);       
+         // console.log("magnitud dle mouse: " + magMouse);
+         // console.log("normMx: " + normMx + " normMy: " + normMy); 
+              
 
         } else {
             //only change theta angle when is the movement related to that angle
             this.shiftAng = 0.05;
             this.shiftCx = 0;
             this.shiftCy = 0;
-            //this.orbit = 0.7;
-            //this.amplitude = 0.5;
-          //  radius = this.radiusParticle/2;
+
+           // this.orbit = 0.7;
+           // this.amplitude = 0.5;
+          //radius = this.radiusParticle/2;
             //console.log("theta: angulo donde quedo antes de cambair " + this.theta);
             //console.log("angleAux2: angulo que cambia la rapidez" + this.angleAux2);
             
@@ -104,6 +117,20 @@ var Mover = function (x, y, name, size, context) {
 
         var c = Math.sqrt(a * a + b * b);
         return c;
+    }
+
+    this.magnitude = function (x, y) {
+        return Math.sqrt(x*x + y*y);
+    }
+
+    this.addDirection = function (mx, x){
+        if(mx - x > 0){
+            console.log("sentido al puntero");
+            return 1;
+        }else{
+            console.log("sentido contrario al puntero");
+            return -1;
+        }
     }
 
 };

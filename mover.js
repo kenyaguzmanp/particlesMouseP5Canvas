@@ -31,7 +31,7 @@ var Mover = function (x, y, name, size, context) {
 
 
     this.display = function () {
-        this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
+        
         var dist = this.distance(this.mousex, this.mousey, this.position[0], this.position[1]) - this.sizeParticle/2;
         if(dist<0){
             //console.log("insideeee");
@@ -39,6 +39,8 @@ var Mover = function (x, y, name, size, context) {
         }else{
             this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
         }
+
+        this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
 
     };
 
@@ -68,11 +70,7 @@ var Mover = function (x, y, name, size, context) {
             var py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
 
             this.position[0] = px;
-            this.position[1] = py; 
-
-
-            
-       
+            this.position[1] = py;  
     }
 
     this.toMouse = function(mx, my){

@@ -37,7 +37,6 @@ function createCanvas() {
 
 function draw() {
     //Schedule next redraw
-    //console.log(numberSelectedParticle);
    reqanimationreference = requestAnimationFrame(draw);
 
     //Draw black background
@@ -48,12 +47,13 @@ function draw() {
         particle = particles[i];
         particle.display();
     }
+   // calculateCollisions();
 }
 
 init();
 
 canvas.addEventListener("mousemove", function(event) {
-    mouseMove(event)
+    mouseMove(event);
 });
 
 function mouseMove(event){
@@ -76,6 +76,7 @@ function mouseMove(event){
         if (distMousePart < 0) {
             //inside particle
             mover.color = "red";
+            console.log("particle: " + mover.name);
             mover.isToMouse = false;
             mover.isMouseInside = true;           
     
@@ -92,7 +93,27 @@ function mouseMove(event){
             mover.isMouseInside = false;
         }
     }
-    
+
+    //calculateCollisions();
+}
+
+function calculateCollisions (){
+    for(var i=0; i<numberParticles-1; i++){
+        var part1 = particles[i];
+        for(var j=i+1; j<numberParticles; i++){
+            var part2 = particles[j];
+            var dx = part1.position[0] - part2.position[0];
+            var dy = part1.position[1] - part2.position[1];
+            var distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < part1.radiusParticle + part2.radiusParticle) {
+                // collision detected!
+                //console.log("colision entre particula " + i + " con particula " + j);
+                part1.color = "yellow";
+                part2.color = "yellow";
+            }
+        } 
+    }
 }
 
 

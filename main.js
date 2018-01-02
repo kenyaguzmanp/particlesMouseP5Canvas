@@ -37,6 +37,7 @@ function createCanvas() {
 
 function draw() {
     //Schedule next redraw
+    //console.log(numberSelectedParticle);
    reqanimationreference = requestAnimationFrame(draw);
 
     //Draw black background
@@ -77,6 +78,7 @@ function mouseMove(event){
 
         mover.mousex = x2;
         mover.mousey = y2;
+
           
         if (distMousePart < 0) {
             //inside particle
@@ -90,16 +92,17 @@ function mouseMove(event){
             mover.color = "blue";
             mover.isToMouse = false;
             mover.isMouseInside = false;
+            mover.stepsToMouse = 0;
         } else {
             //in the action radius
             mover.color = "green";
             mover.isToMouse = true;
             mover.isMouseInside = false;
         }
-        
     }
-
+    
 }
+
 
 function distance(x1, y1, x2, y2){
     var a = x1 - x2

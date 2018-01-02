@@ -32,16 +32,11 @@ var Mover = function (x, y, name, size, context) {
 
     this.display = function () {
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
-        
-        //this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
         var dist = this.distance(this.mousex, this.mousey, this.position[0], this.position[1]) - this.sizeParticle/2;
-        //console.log("dist2: " + dist);
-        //console.log("step to mouse: " + this.stepsToMouse);
         if(dist<0){
-            console.log("insideeee");
+            //console.log("insideeee");
             this.localMovement(0.01,0,0);
         }else{
-            //this.toMouse(this.mousex, this.mousey);
             this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
         }
 
@@ -59,10 +54,9 @@ var Mover = function (x, y, name, size, context) {
 
 
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my, isMouseInside) {
-        //console.log("this.distanceMouse " + this.distanceMouse);
-        //console.log(this.isMouseInside);
-
-            if (isToMouse && !isMouseInside && this.stepsToMouse<80) {
+        //conditional code with the counter steps
+        //if (isToMouse && !isMouseInside && this.stepsToMouse<80)
+            if (isToMouse && !isMouseInside) {
                 this.toMouse(mx, my);
 
     
@@ -70,12 +64,14 @@ var Mover = function (x, y, name, size, context) {
                 this.localMovement(0.07,0,0);
             }
 
-
-            var px = orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * amplitude) + this.centerAux[0];
-            var py = orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * amplitude) + this.centerAux[1];
+            var px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
+            var py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
 
             this.position[0] = px;
             this.position[1] = py; 
+
+
+            
        
     }
 
@@ -86,28 +82,31 @@ var Mover = function (x, y, name, size, context) {
         var dirX = this.addDirection(mx, this.position[0]);
         var dirY = this.addDirection(my, this.position[1]);            
 
-        this.shiftAng = 0.1;
+        
 
         this.shiftCx = normMx * dirX;
         this.shiftCy = normMy * dirY;
 
-        //this.shiftAng = angle;
+        var angle = Math.atan2(my - canvas.height/2,mx - canvas.width/2);
+        //console.log("angle: " + angle);
         
+        //angle that makes to traslate particle with some period
         this.angleAux += this.shiftAng;
-           // this.theta = this.angleAux;
-        //this.amplitude = 1;
+        //angle that traslate angle withoun any jumps
+        //this.angleAux = angle;
 
-           //this.angleAux = this.theta + angle;
-            this.centerAux[0] += this.shiftCx;
-            this.centerAux[1] += this.shiftCy;
-            this.centerParticle = this.centerAux;
 
-            this.stepsToMouse +=1;
+        this.centerAux[0] += this.shiftCx;
+        this.centerAux[1] += this.shiftCy;
+        this.centerParticle = this.centerAux;
+        //counter steps to stop (but is not suitable)
+        //    this.stepsToMouse +=1;
+
+          
             
     }
 
     this.localMovement = function(shiftA, shiftx, shifty){
-        //this.shiftAng = 0.05;
         this.shiftAng = shiftA;
         this.shiftCx = shiftx;
         this.shiftCy = shifty;

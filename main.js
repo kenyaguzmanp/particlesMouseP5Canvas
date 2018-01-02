@@ -43,11 +43,12 @@ function draw() {
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     //mover.display();
+    calculateCollisions();
     for(var i=0; i<numberParticles; i++){
         particle = particles[i];
         particle.display();
     }
-   // calculateCollisions();
+   
 }
 
 init();
@@ -94,13 +95,13 @@ function mouseMove(event){
         }
     }
 
-    //calculateCollisions();
+    calculateCollisions();
 }
 
 function calculateCollisions (){
     for(var i=0; i<numberParticles-1; i++){
         var part1 = particles[i];
-        for(var j=i+1; j<numberParticles; i++){
+        for(var j=i+1; j<numberParticles; j++){
             var part2 = particles[j];
             var dx = part1.position[0] - part2.position[0];
             var dy = part1.position[1] - part2.position[1];
@@ -108,9 +109,12 @@ function calculateCollisions (){
             
             if (distance < part1.radiusParticle + part2.radiusParticle) {
                 // collision detected!
+               // console.log("collision");
                 //console.log("colision entre particula " + i + " con particula " + j);
                 part1.color = "yellow";
                 part2.color = "yellow";
+                part1.collide = true;
+                part2.collide = true;
             }
         } 
     }

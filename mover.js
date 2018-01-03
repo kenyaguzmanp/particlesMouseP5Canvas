@@ -72,6 +72,8 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         ctx.fillStyle = 'yellow';
         ctx.fill();
         ctx.stroke();
+
+        ctx.drawImage(image, posx - this.sizeParticle, posy- this.sizeParticle, this.sizeParticle*2, this.sizeParticle*2);
       
     };
 

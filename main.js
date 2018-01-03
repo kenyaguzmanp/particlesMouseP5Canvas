@@ -14,6 +14,9 @@ var posyArray = [];
 var posMatrix = [];
 
 
+var image =  new Image();
+image.src = 'image.png';
+
 function init(){
     createCanvas();
 }

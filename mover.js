@@ -1,4 +1,4 @@
-var Mover = function (x, y, name, size, context) {
+var Mover = function (x, y, name, size, context, orbit, amplitude) {
     this.position = [x, y];
     this.velocity = [];
     this.acceleration = [];
@@ -12,8 +12,8 @@ var Mover = function (x, y, name, size, context) {
     this.name = name;
     this.color = "blue";
     this.sizeParticle = size;
-    this.orbit = 0.7;
-    this.amplitude = 1;
+    this.orbit = orbit;
+    this.amplitude = amplitude;
     this.showBar = false;
     this.ctx = context;
     this.isHovering = false;

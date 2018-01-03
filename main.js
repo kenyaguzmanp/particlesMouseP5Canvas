@@ -38,8 +38,12 @@ function createCanvas() {
         var psx = posMatrix[i].x;
         var psy = posMatrix[i].y;
         var size = getRandom(20, 50);
+        var orbit = getRandom(0.5, 0.7);
+        //var orbit = 0.7;
+        //var amplitude = 1;
+        var amplitude = getRandom(1, 1.5);
        // console.log("size: " + size); 
-        particles.push(new Mover(psx, psy , "mover" + i, size, ctx));
+        particles.push(new Mover(psx, psy , "mover" + i, size, ctx, orbit, amplitude));
     }
 
     //draw the canvas

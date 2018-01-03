@@ -46,6 +46,18 @@ function draw() {
     calculateCollisions();
     for(var i=0; i<numberParticles; i++){
         particle = particles[i];
+        //particle.display();
+        
+        if(particle.collide){
+            console.log("esta particula colisiona, no mostrare");
+            particle.removeCollision();
+        }else{
+            if(particle.isToMouse){
+                particle.toMouse(mousex, mousey);
+            }else{
+                particle.localMovement(0.07, 0, 0);
+            }     
+        }
         particle.display();
     }
    
@@ -59,6 +71,8 @@ canvas.addEventListener("mousemove", function(event) {
 
 function mouseMove(event){
     var rect = canvas.getBoundingClientRect();
+    //calculate the collision of previous movement
+    //calculateCollisions();   
     for(var i=0; i<numberParticles; i++){
         mover = particles[i];
         var mx= event.clientX - rect.left;
@@ -72,14 +86,14 @@ function mouseMove(event){
 
         mover.mousex = mx;
         mover.mousey = my;
-
-                  
+             
         if (distMousePart < 0) {
             //inside particle
             mover.color = "red";
             console.log("particle: " + mover.name);
             mover.isToMouse = false;
-            mover.isMouseInside = true;           
+            mover.isMouseInside = true;
+            mover.localMovement(0.03, 0, 0);           
     
         } else if (distMousePart > 0 && distMousePart > 300) {
             //out of the action radius
@@ -92,10 +106,12 @@ function mouseMove(event){
             mover.color = "green";
             mover.isToMouse = true;
             mover.isMouseInside = false;
+            mousex = mx;
+            mousey = my;
+            //mover.toMouse(mx, my);
         }
     }
-
-    calculateCollisions();
+    
 }
 
 function calculateCollisions (){
@@ -106,12 +122,17 @@ function calculateCollisions (){
             var dx = part1.position[0] - part2.position[0];
             var dy = part1.position[1] - part2.position[1];
             var distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < part1.radiusParticle + part2.radiusParticle) {
-                //part1.color = "yellow";
-                //part2.color = "yellow";
+            var bigRadius = part1.radiusParticle + part2.radiusParticle;
+            if (distance < bigRadius) {
+                // collision detected!
+                //console.log("collision");
+                part1.color = "yellow";
+                part2.color = "yellow";
                 part1.collide = true;
                 part2.collide = true;
+            }else{
+                part1.collide = false;
+                part2.collide = false;
             }
         } 
     }

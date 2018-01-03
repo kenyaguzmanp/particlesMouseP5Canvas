@@ -30,6 +30,7 @@ var Mover = function (x, y, name, size, context) {
     this.collide = false;
     this.px = x;
     this.py = y;
+    this.stepsInCollision = 0;
 
 
 
@@ -55,7 +56,8 @@ var Mover = function (x, y, name, size, context) {
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my, isMouseInside) {
         var dist = this.distance(mx, my, this.position[0], this.position[1]) - this.sizeParticle / 2;
         if(this.collide){
-            this.localMovement(0.5, 0, 0);
+            //this.localMovement(0.5, 0, 0);
+            this.preventCollision(mx, my);
         }else{
             if (dist < 0 && !isToMouse) {
                 console.log("insideeee");
@@ -77,21 +79,16 @@ var Mover = function (x, y, name, size, context) {
         var normMy = my / magMouse;
         var dirX = this.addDirection(mx, this.position[0]);
         var dirY = this.addDirection(my, this.position[1]);
-
-
-
         this.shiftCx = normMx * dirX;
         this.shiftCy = normMy * dirY;
 
-        var angle = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
+        //var angle = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
         //console.log("angle: " + angle);
 
         //angle that makes to traslate particle with some period
         this.angleAux += this.shiftAng;
         //angle that traslate angle withoun any jumps
         //this.angleAux = angle;
-
-
         this.centerAux[0] += this.shiftCx;
         this.centerAux[1] += this.shiftCy;
         this.centerParticle = this.centerAux;
@@ -101,21 +98,36 @@ var Mover = function (x, y, name, size, context) {
 
     }
 
-    this.preventCollision = function (shiftA, shiftx, shifty) {
-        this.shiftAng = shiftA;
-        this.shiftCx = shiftx;
-        this.shiftCy = shifty;
-
-        this.angleAux += shiftA;
-        this.theta = this.angleAux;
-
-        this.centerAux[0] += this.shiftCx;
-        this.centerAux[1] += this.shiftCy;
-        this.centerParticle = this.centerAux;
-
-
-        this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
-        this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
+    this.preventCollision = function (mx, my) {
+        if(this.stepsInCollision<100){
+            console.log("in collision");
+            var magMouse = this.magnitude(mx, my)
+            var normMx = mx / magMouse;
+            var normMy = my / magMouse;
+            var dirX = this.addDirection(mx, this.position[0]);
+            var dirY = this.addDirection(my, this.position[1]);
+            this.shiftCx = normMx * dirX*-1;
+            this.shiftCy = normMy * dirY*-1;
+    
+            //var angle = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
+            //console.log("angle: " + angle);
+    
+            //angle that makes to traslate particle with some period
+            this.angleAux += this.shiftAng;
+            //angle that traslate angle withoun any jumps
+            //this.angleAux = angle;
+    
+            this.centerAux[0] += this.shiftCx;
+            this.centerAux[1] += this.shiftCy;
+            this.centerParticle = this.centerAux;
+    
+            this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
+            this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
+        }else{
+           this.collide = false;
+           this.stepsInCollision = 0;
+        }
+        this.stepsInCollision +=1;
 
     }
 
@@ -130,7 +142,6 @@ var Mover = function (x, y, name, size, context) {
         this.centerAux[0] += this.shiftCx;
         this.centerAux[1] += this.shiftCy;
         this.centerParticle = this.centerAux;
-
 
         this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
         this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];

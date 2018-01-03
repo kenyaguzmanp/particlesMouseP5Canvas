@@ -1,11 +1,15 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticles = 3;
+var numberParticles = 4;
 var particles = [];
 
 var mousex=0;
 var mousey=0;
+
+var posxArray = [];
+var posyArray = [];
+var posMatrix = [];
 
 
 function init(){
@@ -26,9 +30,12 @@ function createCanvas() {
     ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    generateGrid(0,0);
+
     for(var i=0; i<numberParticles; i++){
-        //var mover =  new Mover(canvas.width/2, canvas.height/2, "mover1", 100, ctx);
-        particles.push(new Mover(getRandom(0, canvas.width-200), getRandom(0, canvas.height-200), "mover" + i, 100, ctx));
+        var psx = posMatrix[i].x;
+        var psy = posMatrix[i].y;
+        particles.push(new Mover(psx, psy , "mover" + i, 100, ctx));
     }
 
     //draw the canvas
@@ -42,7 +49,6 @@ function draw() {
     //Draw black background
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //mover.display();
     calculateCollisions();
     for(var i=0; i<numberParticles; i++){
         particle = particles[i];
@@ -72,8 +78,7 @@ function mouseMove(event){
 
         mover.mousex = mx;
         mover.mousey = my;
-
-                  
+                
         if (distMousePart < 0) {
             //inside particle
             mover.color = "red";
@@ -128,4 +133,32 @@ function distance(x1, y1, x2, y2){
 
 function getRandom(min, max) {
     return Math.random() * (max - min) + min;
+}
+
+function generateGrid(x0, y0){
+    var numberParticlesX = numberParticles/2; 
+    var numberParticlesY = numberParticles/2;
+    var partx = canvas.width / numberParticlesX;
+    var party = canvas.height / numberParticlesY;
+    var pos ={
+        x: 0,
+        y: 0
+    };
+    var c = [];
+    for(var j =0; j < numberParticlesX; j++){
+        var a= (2*j + 1)*0.5;
+        var cx = 0 + a*partx;
+        for(var k=0; k< numberParticlesY; k++){
+            var b = (2*k + 1)*0.5;
+            var cy = y0 + b*party;
+            pos.y = cy;
+            pos.x = cx;
+            c.push(pos);
+            pos = {
+                x: 0,
+                y: 0
+            };
+        }
+    }
+    posMatrix = c;
 }

@@ -1,8 +1,8 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticlesX = 3;
-var numberParticlesY = 3;
+var numberParticlesX = 2;
+var numberParticlesY = 2;
 var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
 
@@ -37,7 +37,9 @@ function createCanvas() {
     for(var i=0; i<numberParticles; i++){
         var psx = posMatrix[i].x;
         var psy = posMatrix[i].y;
-        particles.push(new Mover(psx, psy , "mover" + i, 100, ctx));
+        var size = getRandom(20, 50);
+       // console.log("size: " + size); 
+        particles.push(new Mover(psx, psy , "mover" + i, size, ctx));
     }
 
     //draw the canvas
@@ -85,6 +87,7 @@ function mouseMove(event){
             //inside particle
             mover.color = "red";
             console.log("particle: " + mover.name);
+            console.log("position: " + mover.position);
             mover.isToMouse = false;
             mover.isMouseInside = true;           
     

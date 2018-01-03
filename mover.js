@@ -3,7 +3,7 @@ var Mover = function (x, y, name, size, context) {
     this.velocity = [];
     this.acceleration = [];
     this.topspeed = 5;
-    this.radiusParticle = 50;
+    this.radiusParticle = size;
     this.centerParticle = [x, y];
     this.theta = 0;
     this.angleAux = 0;
@@ -46,7 +46,7 @@ var Mover = function (x, y, name, size, context) {
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'white';
         ctx.beginPath();
-        ctx.arc(posx, posy, 50, 0, 2 * Math.PI);
+        ctx.arc(posx, posy, this.sizeParticle, 0, 2 * Math.PI);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.stroke();
@@ -57,7 +57,7 @@ var Mover = function (x, y, name, size, context) {
         var dist = this.distance(mx, my, this.position[0], this.position[1]) - this.sizeParticle / 2;
         if(this.collide && dist>0){
             //this.localMovement(0.5, 0, 0);
-            this.preventCollision(mx, my);
+            this.preventCollision(mx, my, 100);
         }else{
             if (dist < 0 && !isToMouse) {
                 //console.log("insideeee");
@@ -69,7 +69,7 @@ var Mover = function (x, y, name, size, context) {
             }
     
         }
-        this.verifyEdges(this.position[0], this.position[1]);
+        this.verifyEdges(mx, my, this.px, this.py);
         this.position[0] = this.px;
         this.position[1] = this.py;
         //console.log("px: " + this.px + " py " + this.py);
@@ -97,11 +97,11 @@ var Mover = function (x, y, name, size, context) {
 
         this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
         this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
-
+        
     }
 
-    this.preventCollision = function (mx, my) {
-        if(this.stepsInCollision<100){
+    this.preventCollision = function (mx, my, steps) {
+        if(this.stepsInCollision<steps){
             console.log("in collision");
             var magMouse = this.magnitude(mx, my)
             var normMx = mx / magMouse;
@@ -150,13 +150,22 @@ var Mover = function (x, y, name, size, context) {
 
     }
 
-    this.verifyEdges = function(valx, valy){
-        if((valx<0 && valx>canvas.width - 100)||(valy<0 && valy>canvas.height - 100) ){
-            console.log("fuera de los ejes");
+    this.verifyEdges = function(mx, my, valx, valy){
+        //console.log("in verify edges");
+        var marginx = valx + this.sizeParticle;
+        var marginy = valy + this.sizeParticle;
+       // console.log("marginx " + marginx);
+        if(valx<10 || marginx>canvas.width){
+            console.log("x fuera de los ejes");
+        }else if(valy<10 || marginy>canvas.height){
+            console.log("y fuera de los ejes");
+            this.localMovement(0.07, -5, -5);
         }else if(isNaN(valx) || isNaN (valy)){
-            //console.log("is nan");
+            console.log("is nan");
             //this.px = canvas.width/2;
             //this.py = canvas.height/2;
+        }else{
+           // console.log("dentor d elos ejes");
         }
     }
 

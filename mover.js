@@ -39,6 +39,10 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);          
 
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
+        
+        if(this.isMouseInside){
+            this.drawChildParticle(this.position[0] + 2*this.sizeParticle, this.position[1] + 2*this.sizeParticle);
+        }
 
     };
 
@@ -50,6 +54,25 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.stroke();
+    };
+
+    this.drawChildParticle = function (posx, posy) {
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'white';
+        //diagonal line
+        ctx.beginPath();
+        ctx.moveTo(this.position[0] + this.sizeParticle*0.7, this.position[1] + this.sizeParticle*0.7);
+        ctx.lineTo(posx, posy);
+        ctx.stroke();
+
+        //child particle
+        ctx.beginPath();
+        ctx.arc(posx, posy, this.sizeParticle/2, 0, 2 * Math.PI);
+        ctx.fillStyle = 'yellow';
+        ctx.fill();
+        ctx.stroke();
+      
     };
 
 

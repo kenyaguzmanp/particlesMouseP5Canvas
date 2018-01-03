@@ -93,7 +93,7 @@ function mouseMove(event){
             console.log("particle: " + mover.name);
             console.log("position: " + mover.position);
             mover.isToMouse = false;
-            mover.isMouseInside = true;           
+            mover.isMouseInside = true;          
     
         } else if (distMousePart > 0 && distMousePart > 300) {
             //out of the action radius

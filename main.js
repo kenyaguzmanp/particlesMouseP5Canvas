@@ -1,7 +1,9 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticles = 4;
+var numberParticlesX = 3;
+var numberParticlesY = 3;
+var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
 
 var mousex=0;
@@ -31,7 +33,7 @@ function createCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     generateGrid(0,0);
-
+    console.log("matrix position: " , posMatrix);
     for(var i=0; i<numberParticles; i++){
         var psx = posMatrix[i].x;
         var psy = posMatrix[i].y;
@@ -136,8 +138,6 @@ function getRandom(min, max) {
 }
 
 function generateGrid(x0, y0){
-    var numberParticlesX = numberParticles/2; 
-    var numberParticlesY = numberParticles/2;
     var partx = canvas.width / numberParticlesX;
     var party = canvas.height / numberParticlesY;
     var pos ={
@@ -145,6 +145,8 @@ function generateGrid(x0, y0){
         y: 0
     };
     var c = [];
+    console.log("partx: " + partx);
+    console.log("punto final: " + numberParticlesX*partx);
     for(var j =0; j < numberParticlesX; j++){
         var a= (2*j + 1)*0.5;
         var cx = 0 + a*partx;

@@ -68,7 +68,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
 
         //child particle
         ctx.beginPath();
-        ctx.arc(posx, posy, this.sizeParticle/2, 0, 2 * Math.PI);
+        ctx.arc(posx, posy, this.sizeParticle*1.3, 0, 2 * Math.PI);
         ctx.fillStyle = 'yellow';
         ctx.fill();
         ctx.stroke();

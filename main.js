@@ -1,10 +1,12 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticlesX = 2;
+var numberParticlesX = 15;
 var numberParticlesY = 2;
 var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
+var partx;
+var party;
 
 var mousex=0;
 var mousey=0;
@@ -40,8 +42,12 @@ function createCanvas() {
     for(var i=0; i<numberParticles; i++){
         var psx = posMatrix[i].x;
         var psy = posMatrix[i].y;
-        var size = getRandom(20, 50);
+        var minxy = Math.min(partx/2, party/2);
+        //var size = getRandom(20, 50);
+        var size = getRandom(minxy/6, minxy/2);
         var orbit = getRandom(0.5, 0.7);
+        console.log("minxy: " + minxy);
+        console.log("size: " + size);
         //var orbit = 0.7;
         //var amplitude = 1;
         var amplitude = getRandom(1, 1.5);
@@ -65,7 +71,7 @@ function draw() {
         particle = particles[i];
         particle.display();
     }
-   
+
 }
 
 init();
@@ -98,7 +104,7 @@ function mouseMove(event){
             mover.isToMouse = false;
             mover.isMouseInside = true;          
     
-        } else if (distMousePart > 0 && distMousePart > 300) {
+        } else if (distMousePart > 0 && distMousePart > 80) {
             //out of the action radius
             mover.color = "blue";
             mover.isToMouse = false;
@@ -148,15 +154,13 @@ function getRandom(min, max) {
 }
 
 function generateGrid(x0, y0){
-    var partx = canvas.width / numberParticlesX;
-    var party = canvas.height / numberParticlesY;
+    partx = canvas.width / numberParticlesX;
+    party = canvas.height / numberParticlesY;
     var pos ={
         x: 0,
         y: 0
     };
     var c = [];
-    console.log("partx: " + partx);
-    console.log("punto final: " + numberParticlesX*partx);
     for(var j =0; j < numberParticlesX; j++){
         var a= (2*j + 1)*0.5;
         var cx = 0 + a*partx;

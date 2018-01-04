@@ -81,7 +81,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my, isMouseInside) {
         var dist = this.distance(mx, my, this.position[0], this.position[1]) - this.sizeParticle / 2;
         if(this.collide && dist>0){
-            //this.localMovement(0.5, 0, 0);
+            console.log("in collision and is to mouse false");
             this.preventCollision(mx, my, 100);
         }else{
             if (dist < 0 && !isToMouse) {
@@ -90,7 +90,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
             }else if(dist>0 && isToMouse){
                 this.toMouse(mx, my);
             }else{
-                this.localMovement(0.07, 0, 0);
+                this.localMovement(0.03, 0, 0);
             }
     
         }
@@ -184,7 +184,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
             console.log("x fuera de los ejes");
         }else if(valy<10 || marginy>canvas.height){
             console.log("y fuera de los ejes");
-            this.localMovement(0.07, -5, -5);
+            //this.localMovement(0.07, -5, -5);
         }else if(isNaN(valx) || isNaN (valy)){
             console.log("is nan");
             //this.px = canvas.width/2;

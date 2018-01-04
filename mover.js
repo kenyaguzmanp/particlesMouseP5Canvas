@@ -179,18 +179,14 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         //console.log("in verify edges");
         var marginx = valx + this.sizeParticle;
         var marginy = valy + this.sizeParticle;
-       // console.log("marginx " + marginx);
         if(valx<10 || marginx>canvas.width){
             console.log("x fuera de los ejes");
+            this.collide = true;
         }else if(valy<10 || marginy>canvas.height){
             console.log("y fuera de los ejes");
-            //this.localMovement(0.07, -5, -5);
+            this.collide = true;
         }else if(isNaN(valx) || isNaN (valy)){
             console.log("is nan");
-            //this.px = canvas.width/2;
-            //this.py = canvas.height/2;
-        }else{
-           // console.log("dentor d elos ejes");
         }
     }
 

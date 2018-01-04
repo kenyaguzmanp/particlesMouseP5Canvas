@@ -128,22 +128,28 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     this.preventCollision = function (mx, my, steps) {
         if(this.stepsInCollision<steps){
             console.log("in collision");
-            var magMouse = this.magnitude(mx, my)
-            var normMx = mx / magMouse;
-            var normMy = my / magMouse;
-            var dirX = this.addDirection(mx, this.position[0]);
-            var dirY = this.addDirection(my, this.position[1]);
-            this.shiftCx = normMx * dirX*-1;
-            this.shiftCy = normMy * dirY*-1;
-    
-            //var angle = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
-            //console.log("angle: " + angle);
-    
-            //angle that makes to traslate particle with some period
-            this.angleAux += this.shiftAng;
-            //angle that traslate angle withoun any jumps
-            //this.angleAux = angle;
-    
+            console.log("is in to mouse? " + this.isToMouse);
+            //collision when the particles are attracted to the mouse
+            if(this.isToMouse){
+                var magMouse = this.magnitude(mx, my);
+                var normMx = mx / magMouse;
+                var normMy = my / magMouse;
+                var dirX = this.addDirection(mx, this.position[0]);
+                var dirY = this.addDirection(my, this.position[1]);
+
+                this.shiftCx = normMx * dirX*-1;
+                this.shiftCy = normMy * dirY*-1;
+                this.angleAux += this.shiftAng;
+            }else{ //collision when the particles are in their local movement
+                var magPos = this.magnitude(this.position[0], this.position[1]);
+                var normPx = this.position[0] / magPos;
+                var normPy = this.position[1] / magPos;
+                this.shiftCx = normPx *-1;
+                this.shiftCy = normPy *-1;
+                this.angleAux += this.shiftAng;
+                console.log("collision when is not to mouse");
+            }
+
             this.centerAux[0] += this.shiftCx;
             this.centerAux[1] += this.shiftCy;
             this.centerParticle = this.centerAux;
@@ -186,9 +192,11 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
             if(valx<10 || marginx>canvas.width){
                 console.log("x fuera de los ejes");
                 this.collide = true;
+                console.log("isToMouse? " + this.isToMouse);
             }else if(valy<10 || marginy>canvas.height){
                 console.log("y fuera de los ejes");
                 this.collide = true;
+                console.log("isToMouse? " + this.isToMouse);
             }else if(isNaN(valx) || isNaN (valy)){
                 console.log("is nan");
             }        

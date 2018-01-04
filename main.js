@@ -67,6 +67,8 @@ function draw() {
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     calculateCollisions();
+    drawReferenceCanvasLines()
+    drawReferenceParticleLines(partx, party);
     for(var i=0; i<numberParticles; i++){
         particle = particles[i];
         particle.display();
@@ -140,6 +142,19 @@ function calculateCollisions (){
     }
 }
 
+function drawReferenceCanvasLines(){
+    var epsilon = 5;
+    ctx.strokeRect(epsilon, epsilon, canvas.width - 2*epsilon , canvas.height - 2*epsilon);
+}
+
+function drawReferenceParticleLines(partx, party){
+    for(var i=0; i<numberParticlesX; i++){
+        for(var j=0; j<numberParticlesY; j++){
+            ctx.strokeRect(i*partx, j*party, partx, party);
+        }
+    }
+    
+}
 
 function distance(x1, y1, x2, y2){
     var a = x1 - x2
@@ -176,5 +191,6 @@ function generateGrid(x0, y0){
             };
         }
     }
+    console.log("partx: " + partx);
     posMatrix = c;
 }

@@ -80,24 +80,24 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
 
     this.movementParticle = function (orbit, amplitude, radius, isToMouse, angle, mx, my, isMouseInside) {
         var dist = this.distance(mx, my, this.position[0], this.position[1]) - this.sizeParticle / 2;
+        //if particles collide and mouse is not inside 
         if(this.collide && dist>0){
-            console.log("in collision and is to mouse false");
             this.preventCollision(mx, my, 100);
         }else{
+        //if particles do not collide
+            //if mouse is inside particle, very slow movement
             if (dist < 0 && !isToMouse) {
-                //console.log("insideeee");
                 this.localMovement(0.01, 0, 0);
-            }else if(dist>0 && isToMouse){
+            }else if(dist>0 && dist> this.sizeParticle*1.5 && isToMouse){ //if mouse is in the acttraction radius. Multiply 1.5 in order to the particle do not approach inside
                 this.toMouse(mx, my);
-            }else{
+            }else{ //if mouse is not in the attraction radius
                 this.localMovement(0.03, 0, 0);
             }
     
         }
-        this.verifyEdges(mx, my, this.px, this.py);
+        this.verifyEdges(this.px, this.py);
         this.position[0] = this.px;
         this.position[1] = this.py;
-        //console.log("px: " + this.px + " py " + this.py);
     }
 
     this.toMouse = function (mx, my) {
@@ -122,7 +122,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
 
         this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
         this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
-        
+      
     }
 
     this.preventCollision = function (mx, my, steps) {
@@ -159,6 +159,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     }
 
     this.localMovement = function (shiftA, shiftx, shifty) {
+        var orb = this.orbit;
         this.shiftAng = shiftA;
         this.shiftCx = shiftx;
         this.shiftCy = shifty;
@@ -169,25 +170,28 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         this.centerAux[0] += this.shiftCx;
         this.centerAux[1] += this.shiftCy;
         this.centerParticle = this.centerAux;
+        
+        var pxAux = orb * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
+        var pyAux = orb * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
 
-        this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
-        this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
+        this.px = pxAux;
+        this.py = pyAux;
 
     }
 
-    this.verifyEdges = function(mx, my, valx, valy){
+    this.verifyEdges = function(valx, valy){
         //console.log("in verify edges");
         var marginx = valx + this.sizeParticle;
         var marginy = valy + this.sizeParticle;
-        if(valx<10 || marginx>canvas.width){
-            console.log("x fuera de los ejes");
-            this.collide = true;
-        }else if(valy<10 || marginy>canvas.height){
-            console.log("y fuera de los ejes");
-            this.collide = true;
-        }else if(isNaN(valx) || isNaN (valy)){
-            console.log("is nan");
-        }
+            if(valx<10 || marginx>canvas.width){
+                console.log("x fuera de los ejes");
+                this.collide = true;
+            }else if(valy<10 || marginy>canvas.height){
+                console.log("y fuera de los ejes");
+                this.collide = true;
+            }else if(isNaN(valx) || isNaN (valy)){
+                console.log("is nan");
+            }        
     }
 
     this.distance = function (x1, y1, x2, y2) {

@@ -1,8 +1,8 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticlesX = 15;
-var numberParticlesY = 2;
+var numberParticlesX = 1;
+var numberParticlesY = 1;
 var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
 var partx;
@@ -106,7 +106,7 @@ function mouseMove(event){
             mover.isToMouse = false;
             mover.isMouseInside = true;          
     
-        } else if (distMousePart > 0 && distMousePart > 80) {
+        } else if (distMousePart > 0 && distMousePart > 300) {
             //out of the action radius
             mover.color = "blue";
             mover.isToMouse = false;

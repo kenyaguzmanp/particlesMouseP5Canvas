@@ -89,7 +89,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
             if(dist > this.sizeParticle*1.5 && isToMouse){ //if mouse is in the acttraction radius. Multiply 1.5 in order to the particle do not approach inside
                 this.toMouse(mx, my);
             }else{
-                this.localMovement(dist < 0 && !isToMouse ? 0.01 : 0.03, 0, 0);
+                this.localMovement(dist < 0 && !isToMouse ? slowPeriod : regularPeriod, 0, 0);
             }
            
     
@@ -108,13 +108,9 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         this.shiftCx = normMx * dirX;
         this.shiftCy = normMy * dirY;
 
-        //var angle = Math.atan2(my - canvas.height / 2, mx - canvas.width / 2);
-        //console.log("angle: " + angle);
-
         //angle that makes to traslate particle with some period
         this.angleAux += this.shiftAng;
-        //angle that traslate angle withoun any jumps
-        //this.angleAux = angle;
+  
         this.centerAux[0] += this.shiftCx;
         this.centerAux[1] += this.shiftCy;
         this.centerParticle = this.centerAux;
@@ -126,9 +122,6 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
 
     this.preventCollision = function (mx, my, steps) {
         if(this.stepsInCollision<steps){
-            //console.log("in collision");
-            //console.log("is in to mouse? " + this.isToMouse);
-            //collision when the particles are attracted to the mouse
             if(this.isToMouse){
                 var magMouse = this.magnitude(mx, my);
                 var normMx = mx / magMouse;
@@ -139,30 +132,21 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
                 this.shiftCx = normMx * dirX*-1;
                 this.shiftCy = normMy * dirY*-1;
 
-                this.angleAux += this.shiftAng;
-                this.centerAux[0] += this.shiftCx;
-                this.centerAux[1] += this.shiftCy;
-                this.centerParticle = this.centerAux;
-        
-                this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
-                this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
-
             }else{ //collision when the particles are in their local movement
                 console.log("local movement and collision");
                 console.log("shiftAng " + this.amplitude);
                 this.shiftCx = 0;
                 this.shiftCy = 0;
-                this.shiftAng = -0.03;
-
-                this.angleAux += this.shiftAng;
-                this.centerAux[0] += this.shiftCx;
-                this.centerAux[1] += this.shiftCy;
-                this.centerParticle = this.centerAux;
-
-        
-                this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
-                this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
+                this.shiftAng = regularPeriod*-1;
+                
             }
+            this.angleAux += this.shiftAng;
+            this.centerAux[0] += this.shiftCx;
+            this.centerAux[1] += this.shiftCy;
+            this.centerParticle = this.centerAux;
+    
+            this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
+            this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
             
         }else{
            this.collide = false;

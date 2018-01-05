@@ -1,8 +1,8 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticlesX = 7;
-var numberParticlesY = 2;
+var numberParticlesX = 10;
+var numberParticlesY = 3;
 var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
 var partx;
@@ -14,6 +14,9 @@ var mousey=0;
 var posxArray = [];
 var posyArray = [];
 var posMatrix = [];
+
+var slowPeriod = 0.01;
+var regularPeriod = 0.03;
 
 
 var image =  new Image();

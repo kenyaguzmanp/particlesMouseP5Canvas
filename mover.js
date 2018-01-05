@@ -86,13 +86,12 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         }else{
         //if particles do not collide
             //if mouse is inside particle, very slow movement
-            if (dist < 0 && !isToMouse) {
-                this.localMovement(0.01, 0, 0);
-            }else if(dist>0 && dist> this.sizeParticle*1.5 && isToMouse){ //if mouse is in the acttraction radius. Multiply 1.5 in order to the particle do not approach inside
+            if(dist > this.sizeParticle*1.5 && isToMouse){ //if mouse is in the acttraction radius. Multiply 1.5 in order to the particle do not approach inside
                 this.toMouse(mx, my);
-            }else{ //if mouse is not in the attraction radius
-                this.localMovement(0.03, 0, 0);
+            }else{
+                this.localMovement(dist < 0 && !isToMouse ? 0.01 : 0.03, 0, 0);
             }
+           
     
         }
         this.verifyEdges(this.px, this.py);
@@ -139,17 +138,13 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
 
                 this.shiftCx = normMx * dirX*-1;
                 this.shiftCy = normMy * dirY*-1;
-                this.angleAux += this.shiftAng;
-            }else{ //collision when the particles are in their local movement
-                var magPos = this.magnitude(this.position[0], this.position[1]);
-                var normPx = this.position[0] / magPos;
-                var normPy = this.position[1] / magPos;
-                this.shiftCx = normPx *-1;
-                this.shiftCy = normPy *-1;
-                this.angleAux += this.shiftAng;
-                console.log("collision when is not to mouse");
-            }
 
+            }else{ //collision when the particles are in their local movement
+                this.shiftCx = 0;
+                this.shiftCy = 0;
+                this.shiftAng = 0;
+            }
+            this.angleAux += this.shiftAng;
             this.centerAux[0] += this.shiftCx;
             this.centerAux[1] += this.shiftCy;
             this.centerParticle = this.centerAux;
@@ -186,20 +181,11 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     }
 
     this.verifyEdges = function(valx, valy){
-        //console.log("in verify edges");
         var marginx = valx + this.sizeParticle;
         var marginy = valy + this.sizeParticle;
-            if(valx<10 || marginx>canvas.width){
-                console.log("x fuera de los ejes");
+            if(valx<10 || marginx>canvas.width || valy<10 || marginy>canvas.height){
                 this.collide = true;
-                console.log("isToMouse? " + this.isToMouse);
-            }else if(valy<10 || marginy>canvas.height){
-                console.log("y fuera de los ejes");
-                this.collide = true;
-                console.log("isToMouse? " + this.isToMouse);
-            }else if(isNaN(valx) || isNaN (valy)){
-                console.log("is nan");
-            }        
+            }  
     }
 
     this.distance = function (x1, y1, x2, y2) {

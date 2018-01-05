@@ -2,7 +2,7 @@ var canvas;
 var ctx;
 var reqanimationreference;
 var numberParticlesX = 7;
-var numberParticlesY = 3;
+var numberParticlesY = 2;
 var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
 var partx;
@@ -43,15 +43,9 @@ function createCanvas() {
         var psx = posMatrix[i].x;
         var psy = posMatrix[i].y;
         var minxy = Math.min(partx/2, party/2);
-        //var size = getRandom(20, 50);
         var size = getRandom(minxy/6, minxy/2);
         var orbit = getRandom(0.5, 0.7);
-        console.log("minxy: " + minxy);
-        console.log("size: " + size);
-        //var orbit = 0.7;
-        //var amplitude = 1;
         var amplitude = getRandom(1, 1.5);
-       // console.log("size: " + size); 
         particles.push(new Mover(psx, psy , "mover" + i, size, ctx, orbit, amplitude));
     }
 
@@ -101,8 +95,6 @@ function mouseMove(event){
         if (distMousePart < 0) {
             //inside particle
             mover.color = "red";
-            console.log("particle: " + mover.name);
-            console.log("position: " + mover.position);
             mover.isToMouse = false;
             mover.isMouseInside = true;          
     
@@ -133,8 +125,8 @@ function calculateCollisions (){
             var distance = Math.sqrt(dx * dx + dy * dy);
             
             if (distance < part1.radiusParticle + part2.radiusParticle) {
-                //part1.color = "yellow";
-                //part2.color = "yellow";
+                part1.color = "yellow";
+                part2.color = "yellow";
                 part1.collide = true;
                 part2.collide = true;
             }
@@ -191,6 +183,5 @@ function generateGrid(x0, y0){
             };
         }
     }
-    console.log("partx: " + partx);
     posMatrix = c;
 }

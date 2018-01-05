@@ -2,7 +2,7 @@ var canvas;
 var ctx;
 var reqanimationreference;
 var numberParticlesX = 10;
-var numberParticlesY = 3;
+var numberParticlesY = 2;
 var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
 var partx;
@@ -41,6 +41,8 @@ function createCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     generateGrid(0,0);
+    console.log("partxx: " + partx);
+    console.log("party: " + party);
     console.log("matrix position: " , posMatrix);
     for(var i=0; i<numberParticles; i++){
         var psx = posMatrix[i].x;
@@ -68,6 +70,8 @@ function draw() {
     drawReferenceParticleLines(partx, party);
     for(var i=0; i<numberParticles; i++){
         particle = particles[i];
+        particle.partx = partx;
+        particle.party = party;
         particle.display();
     }
 
@@ -101,7 +105,7 @@ function mouseMove(event){
             mover.isToMouse = false;
             mover.isMouseInside = true;          
     
-        } else if (distMousePart > 0 && distMousePart > 100) {
+        } else if (distMousePart > 0 && distMousePart > 300) {
             //out of the action radius
             mover.color = "blue";
             mover.isToMouse = false;
@@ -134,6 +138,19 @@ function calculateCollisions (){
                 part2.collide = true;
             }
         } 
+    }
+}
+
+function compareToGrid(mover){ 
+    var d = distance(mover.centerGrid[0], mover.centerGrid[1], mover.position[0], mover.position[0]);
+    var b = partx/2 - mover.sizeParticle;
+    //console.log("part con otro " + b);
+    if(d > b){
+        console.log("out of the grid");
+        mover.outOfGrid =  true;
+       // console.log("d " + d);
+    }else{
+        mover.outOfGrid = false;
     }
 }
 
@@ -173,7 +190,7 @@ function generateGrid(x0, y0){
     var c = [];
     for(var j =0; j < numberParticlesX; j++){
         var a= (2*j + 1)*0.5;
-        var cx = 0 + a*partx;
+        var cx = x0 + a*partx;
         for(var k=0; k< numberParticlesY; k++){
             var b = (2*k + 1)*0.5;
             var cy = y0 + b*party;

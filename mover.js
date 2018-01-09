@@ -77,7 +77,6 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         ctx.stroke();
 
         ctx.drawImage(image, this.childPosX - this.sizeParticle, this.childPosY - this.sizeParticle, this.sizeParticle * 2, this.sizeParticle * 2);
-        //this.angleAux2 += 0.08;
     };
 
 

@@ -5,6 +5,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     this.centerParticle = [x, y];
     this.theta = 0;
     this.angleAux = 0;
+    this.angleAux2 = 0;
     this.shiftAng = 0;
     this.name = name;
     this.color = "blue";
@@ -28,13 +29,19 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     this.centerGrid = [x, y];
     this.partx;
     this.party;
-
+    this.px2 = 0;
+    this.py2 = 0;
+    this.childPosX = x;
+    this.childPosY = y;
+    
 
     this.display = function () {
 
         this.movementParticle(this.orbit, this.amplitude, this.radiusParticle, this.isToMouse, this.theta, this.mousex, this.mousey, this.inMouseInside);
 
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
+
+        //this.drawChildParticle(this.position[0] + 2 * this.sizeParticle, this.position[1] + 2 * this.sizeParticle);
 
         if (this.isMouseInside) {
             this.drawChildParticle(this.position[0] + 2 * this.sizeParticle, this.position[1] + 2 * this.sizeParticle);
@@ -59,18 +66,18 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         //diagonal line
         ctx.beginPath();
         ctx.moveTo(this.position[0] + this.sizeParticle * 0.7, this.position[1] + this.sizeParticle * 0.7);
-        ctx.lineTo(posx, posy);
+        ctx.lineTo(this.childPosX, this.childPosY);
         ctx.stroke();
 
         //child particle
         ctx.beginPath();
-        ctx.arc(posx, posy, this.sizeParticle * 1.3, 0, 2 * Math.PI);
+        ctx.arc(this.childPosX, this.childPosY, this.sizeParticle * 1.3, 0, 2 * Math.PI);
         ctx.fillStyle = 'yellow';
         ctx.fill();
         ctx.stroke();
 
-        ctx.drawImage(image, posx - this.sizeParticle, posy - this.sizeParticle, this.sizeParticle * 2, this.sizeParticle * 2);
-
+        ctx.drawImage(image, this.childPosX - this.sizeParticle, this.childPosY - this.sizeParticle, this.sizeParticle * 2, this.sizeParticle * 2);
+        //this.angleAux2 += 0.08;
     };
 
 
@@ -94,6 +101,10 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         this.compareToGrid(this.px, this.py);
         this.position[0] = this.px;
         this.position[1] = this.py;
+
+        //position of child particle
+        this.childPosX = this.px2;
+        this.childPosY = this.py2;
     }
 
     this.toMouse = function (mx, my) {
@@ -114,6 +125,10 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
 
         this.px = this.orbit * (this.radiusParticle / 2) * Math.cos(this.angleAux * this.amplitude) + this.centerAux[0];
         this.py = this.orbit * (this.radiusParticle / 2) * Math.sin(this.angleAux * this.amplitude) + this.centerAux[1];
+
+        //position of child particle
+        this.px2 = this.px;
+        this.py2 = this.py;
 
     }
 
@@ -179,6 +194,9 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         this.angleAux += shiftA;
         this.theta = this.angleAux;
 
+        //angle change of child particle
+        this.angleAux2 += shiftA*3;
+
         this.centerAux[0] += this.shiftCx;
         this.centerAux[1] += this.shiftCy;
         this.centerParticle = this.centerAux;
@@ -189,6 +207,12 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         this.px = pxAux;
         this.py = pyAux;
 
+        //position of child particle. direction to center of canvas
+        var d1 = this.addDirection(canvas.width/2, this.centerAux[0]);
+        var d2 = this.addDirection(canvas.height/2, this.centerAux[1]);
+        this.px2 = orb * (this.radiusParticle ) * Math.cos(this.angleAux2 * this.amplitude /2) + this.centerParticle[0] + (this.sizeParticle*3)*d1;
+        this.py2 = orb * (this.radiusParticle ) * Math.sin(this.angleAux2 * this.amplitude/2) + this.centerParticle[1] + (this.sizeParticle*3)*d2;
+        
         //this.compareToGrid(this.px,this.py);
 
     }

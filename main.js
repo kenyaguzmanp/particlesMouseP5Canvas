@@ -1,7 +1,7 @@
 var canvas;
 var ctx;
 var reqanimationreference;
-var numberParticlesX = 10;
+var numberParticlesX = 2;
 var numberParticlesY = 2;
 var numberParticles = numberParticlesX*numberParticlesY;
 var particles = [];
@@ -11,8 +11,6 @@ var party;
 var mousex=0;
 var mousey=0;
 
-var posxArray = [];
-var posyArray = [];
 var posMatrix = [];
 
 var slowPeriod = 0.01;
@@ -53,6 +51,7 @@ function createCanvas() {
         var amplitude = getRandom(1, 1.5);
         particles.push(new Mover(psx, psy , "mover" + i, size, ctx, orbit, amplitude));
     }
+    console.log(particles)
 
     //draw the canvas
     draw();
@@ -66,7 +65,7 @@ function draw() {
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     calculateCollisions();
-    drawReferenceCanvasLines()
+    drawReferenceCanvasLines();
     drawReferenceParticleLines(partx, party);
     for(var i=0; i<numberParticles; i++){
         particle = particles[i];

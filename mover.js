@@ -67,6 +67,8 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     };
 
     this.drawChildParticle = function (posx, posy) {
+        // Save the state, so we can undo the clipping
+        ctx.save();
 
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'white';
@@ -83,7 +85,14 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         ctx.fillStyle = 'yellow';
         ctx.fill();
         ctx.stroke();
-        //ctx.drawImage(image, this.childPosX - this.sizeParticle, this.childPosY - this.sizeParticle, this.sizeParticle * 2, this.sizeParticle * 2);
+        // Clip to the current path
+        ctx.clip();
+        
+        ctx.drawImage(image, this.childPosX - this.sizeChildParticle, this.childPosY - this.sizeChildParticle, this.sizeChildParticle * 2, this.sizeChildParticle * 2);
+
+         // Undo the clipping
+        ctx.restore();
+        
     };
 
 

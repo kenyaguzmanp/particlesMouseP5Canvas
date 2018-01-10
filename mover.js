@@ -33,7 +33,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     this.py2 = 0;
     this.childPosX = x;
     this.childPosY = y;
-    
+    this.sizeChildParticle = 0;
 
     this.display = function () {
 
@@ -41,11 +41,18 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
 
         this.drawSimpleParticle(this.position[0], this.position[1], this.isHovering, this.color);
 
-        //this.drawChildParticle(this.position[0] + 2 * this.sizeParticle, this.position[1] + 2 * this.sizeParticle);
-
         if (this.isMouseInside) {
             this.drawChildParticle(this.position[0] + 2 * this.sizeParticle, this.position[1] + 2 * this.sizeParticle);
+            //iterate in scale of child particle
+            //if sizeChildParticle has reqched his amximun point, do not iterate again
+            if(this.sizeChildParticle  < this.sizeParticle*1.3){
+                this.sizeChildParticle += 5;
+            }
+            
+        }else{
+            this.sizeChildParticle = 0;
         }
+        
 
     };
 
@@ -69,14 +76,14 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         ctx.lineTo(this.childPosX, this.childPosY);
         ctx.stroke();
 
+        //final size of child particle: this.sizeParticle * 1.3
         //child particle
         ctx.beginPath();
-        ctx.arc(this.childPosX, this.childPosY, this.sizeParticle * 1.3, 0, 2 * Math.PI);
+        ctx.arc(this.childPosX, this.childPosY, this.sizeChildParticle , 0, 2 * Math.PI);
         ctx.fillStyle = 'yellow';
         ctx.fill();
         ctx.stroke();
-
-        ctx.drawImage(image, this.childPosX - this.sizeParticle, this.childPosY - this.sizeParticle, this.sizeParticle * 2, this.sizeParticle * 2);
+        //ctx.drawImage(image, this.childPosX - this.sizeParticle, this.childPosY - this.sizeParticle, this.sizeParticle * 2, this.sizeParticle * 2);
     };
 
 
@@ -211,7 +218,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         var d2 = this.addDirection(canvas.height/2, this.centerAux[1]);
         this.px2 = orb * (this.radiusParticle ) * Math.cos(this.angleAux2 * this.amplitude /2) + this.centerParticle[0] + (this.sizeParticle*3)*d1;
         this.py2 = orb * (this.radiusParticle ) * Math.sin(this.angleAux2 * this.amplitude/2) + this.centerParticle[1] + (this.sizeParticle*3)*d2;
-        
+      
         //this.compareToGrid(this.px,this.py);
 
     }

@@ -16,12 +16,28 @@ var posMatrix = [];
 var slowPeriod = 0.01;
 var regularPeriod = 0.03;
 
+var json = [];
 
+/*
 var image =  new Image();
-image.src = 'image.png';
-
+//image.src = 'image.png';
+//image.src = 'images/person-4.png';
+*/
 function init(){
-    createCanvas();
+    //load the json file with the images
+    loadJSON('voices-info.json', 
+    function(data) {
+        console.log("complete JSON: " , data);
+        json = data;
+        console.log("json: " , json);
+        //after recive the images, create  the canvas
+        createCanvas();
+        },
+        function(xhr) { 
+         console.error(xhr); 
+        }
+    );
+   
 }
 
 //Create 2D canvas
@@ -49,12 +65,19 @@ function createCanvas() {
         var size = getRandom(minxy/6, minxy/2);
         var orbit = getRandom(0.5, 0.7);
         var amplitude = getRandom(1, 1.5);
-        particles.push(new Mover(psx, psy , "mover" + i, size, ctx, orbit, amplitude));
+        // info variable grab the info of json data of particular particle
+        var info = json[i];
+        particles.push(new Mover(psx, psy , "mover" + i, size, ctx, orbit, amplitude, info));
     }
     console.log(particles)
 
     //draw the canvas
     draw();
+    //put the event here (dont really sure why)
+    canvas.addEventListener("mousemove", function(event) {
+        mouseMove(event);
+    });
+    
 }
 
 function draw() {
@@ -78,9 +101,6 @@ function draw() {
 
 init();
 
-canvas.addEventListener("mousemove", function(event) {
-    mouseMove(event);
-});
 
 function mouseMove(event){
     var rect = canvas.getBoundingClientRect();
@@ -203,4 +223,25 @@ function generateGrid(x0, y0){
         }
     }
     posMatrix = c;
+}
+
+function loadJSON(path, success, error)
+{   
+    console.log("in load json");
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function()
+    {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                if (success)
+                    success(JSON.parse(xhr.responseText));
+            } else {
+                if (error)
+                    error(xhr);
+            }
+        }
+    };
+    xhr.open("GET", path, true);
+    xhr.send();
+    
 }

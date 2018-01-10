@@ -1,4 +1,4 @@
-var Mover = function (x, y, name, size, context, orbit, amplitude) {
+var Mover = function (x, y, name, size, context, orbit, amplitude, info) {
     this.position = [x, y];
     this.topspeed = 5;
     this.radiusParticle = size;
@@ -34,6 +34,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
     this.childPosX = x;
     this.childPosY = y;
     this.sizeChildParticle = 0;
+    this.info = info;
 
     this.display = function () {
 
@@ -87,9 +88,12 @@ var Mover = function (x, y, name, size, context, orbit, amplitude) {
         ctx.stroke();
         // Clip to the current path
         ctx.clip();
-        
-        ctx.drawImage(image, this.childPosX - this.sizeChildParticle, this.childPosY - this.sizeChildParticle, this.sizeChildParticle * 2, this.sizeChildParticle * 2);
 
+        var image =  new Image();
+        image.src = this.info.path;
+        
+        //ctx.drawImage(image, this.childPosX - this.sizeChildParticle, this.childPosY - this.sizeChildParticle, this.sizeChildParticle * 2, this.sizeChildParticle * 2);
+        ctx.drawImage(image, this.childPosX - this.sizeChildParticle, this.childPosY - this.sizeChildParticle, this.sizeChildParticle * 2, this.sizeChildParticle * 2);        
          // Undo the clipping
         ctx.restore();
         

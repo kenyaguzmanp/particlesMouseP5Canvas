@@ -79,6 +79,10 @@ var Mover = function (x, y, name, size, context, orbit, amplitude, info) {
         ctx.lineTo(this.childPosX, this.childPosY);
         ctx.stroke();
 
+        //add the name of the people
+        ctx.font = "48px serif";
+        ctx.fillText(info.name, this.childPosX + 100, this.childPosY + 100);
+
         //final size of child particle: this.sizeParticle * 1.3
         //child particle
         ctx.beginPath();
@@ -92,7 +96,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude, info) {
         var image =  new Image();
         image.src = this.info.path;
         
-        //ctx.drawImage(image, this.childPosX - this.sizeChildParticle, this.childPosY - this.sizeChildParticle, this.sizeChildParticle * 2, this.sizeChildParticle * 2);
+        ctx.drawImage(image, this.childPosX - this.sizeChildParticle, this.childPosY - this.sizeChildParticle, this.sizeChildParticle * 2, this.sizeChildParticle * 2);
         ctx.drawImage(image, this.childPosX - this.sizeChildParticle, this.childPosY - this.sizeChildParticle, this.sizeChildParticle * 2, this.sizeChildParticle * 2);        
          // Undo the clipping
         ctx.restore();

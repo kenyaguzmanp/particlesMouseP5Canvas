@@ -67,7 +67,7 @@ function createCanvas() {
         var amplitude = getRandom(1, 1.5);
         // info variable grab the info of json data of particular particle
         var info = json[i];
-        particles.push(new Mover(psx, psy , "mover" + i, size, ctx, orbit, amplitude, info));
+        particles.push(new Mover(psx, psy , info.name, size, ctx, orbit, amplitude, info));
     }
     console.log(particles)
 

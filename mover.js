@@ -35,6 +35,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude, info) {
     this.childPosY = y;
     this.sizeChildParticle = 0;
     this.info = info;
+    this.stps = 0;
 
     this.display = function () {
 
@@ -121,15 +122,25 @@ var Mover = function (x, y, name, size, context, orbit, amplitude, info) {
 
         // }
         //this.verifyEdges(this.px, this.py);
-        this.compareToGrid(this.px, this.py);
-        this.position[0] = this.px;
-        this.position[1] = this.py;
+        this.compareToGrid(this.px, this.py, this.shiftCx, this.shiftCy);
+        var deltx = 0;
+        var delty = 0;
+        if(this.outOfGrid){
+            console.log("outttt");
+            /*
+            this.px = this.position[0];
+            this.py = this.position[1]; */
+            deltx = -100;
+            delty = -100;
+        }
+        this.position[0] = this.px + deltx;
+        this.position[1] = this.py + delty;
 
         //position of child particle
         this.childPosX = this.px2;
         this.childPosY = this.py2;
     }
-
+  
     this.toMouse = function (mx, my) {
         var magMouse = this.magnitude(mx, my)
         var normMx = mx / magMouse;
@@ -155,7 +166,7 @@ var Mover = function (x, y, name, size, context, orbit, amplitude, info) {
 
     }
 
-    this.compareToGrid = function (x, y) {
+    this.compareToGrid = function (x, y, vx, vy) {
         var radx = x;
         var rady = y;
         var c = this.centerGrid[0] + partx / 2;
@@ -165,10 +176,13 @@ var Mover = function (x, y, name, size, context, orbit, amplitude, info) {
         var f = this.centerGrid[1] - party / 2;
         if (radx > c - this.sizeParticle || rady > d - this.sizeParticle || radx < e + this.sizeParticle || rady < f + this.sizeParticle) {
             this.outOfGrid = true;
-            this.px = this.position[0];
-            this.py = this.position[1];
+            
+            // this.px = this.position[0];
+            // this.py = this.position[1];
+            
+            // this.contraryDirection(x, y, vx, vy);
         } else {
-            this.outOfGrid = false;
+           this.outOfGrid = false;
         }
     }
 
